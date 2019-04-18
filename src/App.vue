@@ -2,7 +2,9 @@
     <div id="app">
         <header class="header">
             <h1>todos</h1>
-            <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?">
+            <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?"
+                   v-model="newTitle" @keyup.enter="newTodo"
+            >
         </header>
 
         <section class="main">
@@ -13,7 +15,7 @@
             >
             <label for="toggle-all">Mark all as complete</label>
             <ul class="todo-list">
-                <li v-for="item in todos" :class="{todo:true,editing:item==editTodo,completed:item.completed}">
+                <li v-for="(item,idx) in todos" :class="{todo:true,editing:item==editTodo,completed:item.completed}">
                     <div class="view">
                         <input class="toggle"
                                type="checkbox"
@@ -22,7 +24,7 @@
                         <label  @dblclick="edit(item)"
                                 @click="finish(item)"
                         >{{item.title}}</label>
-                        <button class="destroy"></button>
+                        <button class="destroy" @click="deleteTodo(idx)"></button>
                     </div>
                     <input class="edit" type="text"
                            v-model="item.title"
@@ -44,7 +46,7 @@
                 <li><a href="#/active">Active</a></li>
                 <li><a href="#/completed">Completed</a></li>
             </ul>
-            <button class="clear-completed">Clear completed</button>
+            <button class="clear-completed" @click="deleteAll">Clear completed</button>
         </footer>
         <!--<footer class="info">
             <p>Double-click to edit a todo</p>
@@ -60,6 +62,7 @@
         data: () => ({
                 editTodo:"",
                 beforeEditCache:"",
+                newTitle: "",
                 todos: [
                 {
                     title: "宇宙第一标",
@@ -71,15 +74,16 @@
                     completed: true,
                     editing: false,
                 },
-                    {
-                        title: "千年老三",
-                        completed: false,
-                        editing: false,
-                    }
+                {
+                    title: "千年老三",
+                    completed: false,
+                    editing: false,
+                }
                 ],
+                filter: "all",
             }),
         computed: {
-            allDone:{
+            allDone: {
                 get(){
                    return this.todos.every(item=>item.completed);
                 },
@@ -88,9 +92,21 @@
                         item.completed = val;
                     })
                 }
+            },
+            showTodo: function(){
+
             }
         },
         methods: {
+            newTodo: function(ev) {
+                this.newTitle &&
+                this.todos.push({
+                    title: this.newTitle,
+                    completed: false,
+                    editing: false
+                });
+                this.newTitle = "";
+            },
             edit: function(item){
                 this.editTodo = item;
                 this.beforeEditCache = item.title;
@@ -98,7 +114,6 @@
             confirm: function(){
                 console.log('test confirm');
                 this.editTodo = null;
-                console.log('alldone',this.allDone);
             },
             cancel: function(item){
                 this.editTodo = null;
@@ -106,6 +121,15 @@
             },
             finish: function (item) {
                 item.completed = !item.completed;
+            },
+            deleteTodo: function (idx){
+                this.todos.splice(idx,1);
+            },
+            deleteAll: function () {
+                this.todos.splice(0);
+            },
+            changeFilter: function(payload){
+
             }
         },
         directives: {
