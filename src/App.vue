@@ -91,7 +91,6 @@
             }
         },
         methods: {
-            //param
             edit: function(item){
                 this.editTodo = item;
                 this.beforeEditCache = item.title;
@@ -106,7 +105,6 @@
                 item.title = this.beforeEditCache;
             },
             finish: function (item) {
-                console.log('完成');
                 item.completed = !item.completed;
             }
         },
