@@ -1,13 +1,7 @@
 <template>
-    <section class="main">
-        <input id="toggle-all" class="toggle-all"
-               type="checkbox"
-               :checked="$parent.allDone"
-               @change="$parent.allDone=!allDone"
-        >
-        <label for="toggle-all">Mark all as complete</label>
-        <!--<ul class="todo-list">
-            <li v-for="(item,idx) in $parent.showTodos"
+    <ul class="todo-list">
+        <h1 @click="show">hahaha</h1>
+        <li v-for="(item,idx) in $parent.showTodos"
             :class="{todo:true,editing:item===$parent.editTodo,completed:item.completed}">
             <div class="view">
                 <input class="toggle"
@@ -27,15 +21,24 @@
                    v-todo-focus="$parent.editTodo===item"
             >
         </li>
-        </ul>-->
-        <router-view></router-view>
-
-    </section>
+    </ul>
 </template>
 
 <script>
     export default {
-        name: "TodoList",
+        name: "Todos",
+        methods:{
+            show(){
+                console.log(this.$parent.todos);
+            }
+        },
+        directives: {
+            'todo-focus': function (el, binding) {
+                if (binding.value) {
+                    el.focus();
+                }
+            }
+        }
     }
 </script>
 

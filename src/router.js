@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 
-import TodoList from './components/TodoList.vue'
+import Todos from './components/Todos.vue'
 
 Vue.use(Router)
 
@@ -26,7 +26,7 @@ export default new Router({
         {
             path: '/:filter',
             name: 'Filter',
-            component: TodoList
+            component: Todos
         }
 
     ]

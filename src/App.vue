@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <the-header></the-header>
+        <the-header @newTodoEvent="newTodo"></the-header>
 
         <router-view></router-view>
 
