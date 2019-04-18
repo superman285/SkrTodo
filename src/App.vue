@@ -2,7 +2,7 @@
     <div id="app">
         <the-header></the-header>
 
-        <todo-list></todo-list>
+        <router-view></router-view>
 
         <the-footer></the-footer>
 
@@ -28,6 +28,10 @@
             'the-header': TheHeader,
             'the-footer': TheFooter,
             'todo-list': TodoList
+        },
+        created: function(){
+            //this.$router.push("/all");
+            this.filter = this.$route.path.slice(1);
         },
         data: () => (
             {
@@ -76,6 +80,11 @@
             todoCount: function(){
                 return this.showTodos.length;
             }
+        },
+        watch: {
+          '$route': function(to,from){
+              this.filter = to.path.slice(1);
+          }  
         },
         methods: {
             newTodo: function (ev) {
