@@ -6,7 +6,11 @@
         </header>
 
         <section class="main">
-            <input id="toggle-all" class="toggle-all" type="checkbox">
+            <input id="toggle-all" class="toggle-all"
+                   type="checkbox"
+                   :checked = "allDone"
+                   @change="allDone=!allDone"
+            >
             <label for="toggle-all">Mark all as complete</label>
             <ul class="todo-list">
                 <li v-for="item in todos" :class="{todo:true,editing:item==editTodo,completed:item.completed}">
@@ -79,8 +83,10 @@
                 get(){
                    return this.todos.every(item=>item.completed);
                 },
-                set(){
-
+                set(val){
+                    this.todos.forEach(item=>{
+                        item.completed = val;
+                    })
                 }
             }
         },
@@ -91,7 +97,9 @@
                 this.beforeEditCache = item.title;
             },
             confirm: function(){
+                console.log('test confirm');
                 this.editTodo = null;
+                console.log('alldone',this.allDone);
             },
             cancel: function(item){
                 this.editTodo = null;
@@ -109,7 +117,6 @@
                 }
             }
         }
-
     }
 
 </script>
