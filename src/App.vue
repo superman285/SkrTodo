@@ -1,56 +1,14 @@
 <template>
     <div id="app">
-        <header class="header">
-            <h1>todos</h1>
-            <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?"
-                   v-model="newTitle" @keyup.enter="newTodo"
-            >
-        </header>
+        <the-header></the-header>
 
-        <section class="main">
-            <input id="toggle-all" class="toggle-all"
-                   type="checkbox"
-                   :checked="allDone"
-                   @change="allDone=!allDone"
-            >
-            <label for="toggle-all">Mark all as complete</label>
-            <ul class="todo-list">
-                <li v-for="(item,idx) in showTodos"
-                    :class="{todo:true,editing:item===editTodo,completed:item.completed}">
-                    <div class="view">
-                        <input class="toggle"
-                               type="checkbox"
-                               v-model="item.completed"
-                        >
-                        <label @dblclick="edit(item)"
-                               @click="finish(item)"
-                        >{{item.title}}</label>
-                        <button class="destroy" @click="deleteTodo(idx)"></button>
-                    </div>
-                    <input class="edit" type="text"
-                           v-model="item.title"
-                           @keyup.enter="confirm"
-                           @keyup.esc="cancel(item)"
-                           @blur="confirm"
-                           v-todo-focus="editTodo===item"
-                    >
-                </li>
-            </ul>
-        </section>
+        <todo-list></todo-list>
 
-        <footer class="footer">
-            <span class="todo-count">
-                <strong>3</strong> todo
-            </span>
-            <ul class="filters">
-                <li><a href="#/all" :class="{selected:filter==='all'}" @click="changeFilter('all')">All</a></li>
-                <li><a href="#/active" :class="{selected:filter==='active'}" @click="changeFilter('active')">Active</a>
-                </li>
-                <li><a href="#/completed" :class="{selected:filter==='completed'}" @click="changeFilter('completed')">Completed</a>
-                </li>
-            </ul>
-            <button class="clear-completed" @click="deleteAll">Clear completed</button>
-        </footer>
+        <the-footer></the-footer>
+
+
+
+
         <!--<footer class="info">
             <p>Double-click to edit a todo</p>
             <p>Written by <a href="http://evanyou.me">Evan You</a></p>
@@ -60,8 +18,17 @@
 </template>
 
 <script>
+    import TheHeader from "@/components/TheHeader";
+    import TheFooter from "@/components/TheFooter";
+    import TodoList from "@/components/TodoList.vue";
+
     export default {
         name: "app",
+        components: {
+            'the-header': TheHeader,
+            'the-footer': TheFooter,
+            'todo-list': TodoList
+        },
         data: () => (
             {
                 editTodo: "",
@@ -105,6 +72,9 @@
                 } else {
                     return this.todos;
                 }
+            },
+            todoCount: function(){
+                return this.showTodos.length;
             }
         },
         methods: {
@@ -138,17 +108,11 @@
             deleteAll: function () {
                 this.todos.splice(0);
             },
-            changeFilter: function (payload) {
-                this.filter = payload;
+            changeFilter: function (state) {
+                this.filter = state;
             }
         },
-        directives: {
-            'todo-focus': function (el, binding) {
-                if (binding.value) {
-                    el.focus();
-                }
-            }
-        }
+
     }
 
 </script>
