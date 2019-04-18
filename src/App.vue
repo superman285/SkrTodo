@@ -10,19 +10,20 @@
         <section class="main">
             <input id="toggle-all" class="toggle-all"
                    type="checkbox"
-                   :checked = "allDone"
+                   :checked="allDone"
                    @change="allDone=!allDone"
             >
             <label for="toggle-all">Mark all as complete</label>
             <ul class="todo-list">
-                <li v-for="(item,idx) in todos" :class="{todo:true,editing:item==editTodo,completed:item.completed}">
+                <li v-for="(item,idx) in showTodos"
+                    :class="{todo:true,editing:item===editTodo,completed:item.completed}">
                     <div class="view">
                         <input class="toggle"
                                type="checkbox"
                                v-model="item.completed"
                         >
-                        <label  @dblclick="edit(item)"
-                                @click="finish(item)"
+                        <label @dblclick="edit(item)"
+                               @click="finish(item)"
                         >{{item.title}}</label>
                         <button class="destroy" @click="deleteTodo(idx)"></button>
                     </div>
@@ -31,7 +32,7 @@
                            @keyup.enter="confirm"
                            @keyup.esc="cancel(item)"
                            @blur="confirm"
-                           v-todo-focus="editTodo==item"
+                           v-todo-focus="editTodo===item"
                     >
                 </li>
             </ul>
@@ -42,9 +43,11 @@
                 <strong>3</strong> todo
             </span>
             <ul class="filters">
-                <li><a href="#/all" class="selected">All</a></li>
-                <li><a href="#/active">Active</a></li>
-                <li><a href="#/completed">Completed</a></li>
+                <li><a href="#/all" :class="{selected:filter==='all'}" @click="changeFilter('all')">All</a></li>
+                <li><a href="#/active" :class="{selected:filter==='active'}" @click="changeFilter('active')">Active</a>
+                </li>
+                <li><a href="#/completed" :class="{selected:filter==='completed'}" @click="changeFilter('completed')">Completed</a>
+                </li>
             </ul>
             <button class="clear-completed" @click="deleteAll">Clear completed</button>
         </footer>
@@ -59,46 +62,53 @@
 <script>
     export default {
         name: "app",
-        data: () => ({
-                editTodo:"",
-                beforeEditCache:"",
+        data: () => (
+            {
+                editTodo: "",
+                beforeEditCache: "",
                 newTitle: "",
                 todos: [
-                {
-                    title: "宇宙第一标",
-                    completed: false,
-                    editing: true,
-                },
-                {
-                    title: "千年老二",
-                    completed: true,
-                    editing: false,
-                },
-                {
-                    title: "千年老三",
-                    completed: false,
-                    editing: false,
-                }
+                    {
+                        title: "宇宙第一标",
+                        completed: false,
+                        editing: true,
+                    },
+                    {
+                        title: "千年老二",
+                        completed: true,
+                        editing: false,
+                    },
+                    {
+                        title: "千年老三",
+                        completed: false,
+                        editing: false,
+                    }
                 ],
                 filter: "all",
             }),
         computed: {
             allDone: {
-                get(){
-                   return this.todos.every(item=>item.completed);
+                get() {
+                    return this.todos.every(item => item.completed);
                 },
-                set(val){
-                    this.todos.forEach(item=>{
+                set(val) {
+                    this.todos.forEach(item => {
                         item.completed = val;
                     })
                 }
             },
-            showTodo: function(){
-
+            showTodos: function () {
+                if (this.filter === "active") {
+                    return this.todos.filter(item => !item.completed)
+                } else if (this.filter === "completed") {
+                    return this.todos.filter(item => item.completed)
+                } else {
+                    return this.todos;
+                }
             }
         },
         methods: {
-            newTodo: function(ev) {
+            newTodo: function (ev) {
                 this.newTitle &&
                 this.todos.push({
                     title: this.newTitle,
@@ -107,34 +117,34 @@
                 });
                 this.newTitle = "";
             },
-            edit: function(item){
+            edit: function (item) {
                 this.editTodo = item;
                 this.beforeEditCache = item.title;
             },
-            confirm: function(){
+            confirm: function () {
                 console.log('test confirm');
                 this.editTodo = null;
             },
-            cancel: function(item){
+            cancel: function (item) {
                 this.editTodo = null;
                 item.title = this.beforeEditCache;
             },
             finish: function (item) {
                 item.completed = !item.completed;
             },
-            deleteTodo: function (idx){
-                this.todos.splice(idx,1);
+            deleteTodo: function (idx) {
+                this.todos.splice(idx, 1);
             },
             deleteAll: function () {
                 this.todos.splice(0);
             },
-            changeFilter: function(payload){
-
+            changeFilter: function (payload) {
+                this.filter = payload;
             }
         },
         directives: {
-            'todo-focus': function(el,binding){
-                if(binding.value) {
+            'todo-focus': function (el, binding) {
+                if (binding.value) {
                     el.focus();
                 }
             }
