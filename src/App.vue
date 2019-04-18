@@ -37,7 +37,6 @@
             {
                 editTodo: "",
                 beforeEditCache: "",
-                newTitle: "",
                 todos: [
                     {
                         title: "宇宙第一标",
@@ -87,14 +86,13 @@
           }  
         },
         methods: {
-            newTodo: function (ev) {
-                this.newTitle &&
+            newTodo: function (val) {
+                val &&
                 this.todos.push({
-                    title: this.newTitle,
+                    title: val,
                     completed: false,
                     editing: false
                 });
-                this.newTitle = "";
             },
             edit: function (item) {
                 this.editTodo = item;
