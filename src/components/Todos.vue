@@ -1,23 +1,24 @@
 <template>
     <ul class="todo-list">
-        <li v-for="(item,idx) in $store.getters.showTodos"
-            :class="{todo:true,editing:item===$store.state.editTodo,completed:item.completed}">
+        <li v-for="(todo,idx) in $store.getters.showTodos"
+            :class="{todo:true,editing:todo===$store.state.editTodo,completed:todo.completed}"
+        >
             <div class="view">
                 <input class="toggle"
                        type="checkbox"
-                       v-model="item.completed"
+                       v-model="todo.completed"
                 >
-                <label @dblclick="$store.commit('editTodo',item)"
-                       @click="$store.commit('finishTodo',item)"
-                >{{item.title}}</label>
-                <button class="destroy" @click="$store.commit('deleteTodo',item)"></button>
+                <label @dblclick="$store.commit('editTodo',todo)"
+                       @click="$store.commit('finishTodo',todo)"
+                >{{todo.title}}</label>
+                <button class="destroy" @click="$store.commit('deleteTodo',idx)"></button>
             </div>
             <input class="edit" type="text"
-                   v-model="item.title"
+                   v-model="todo.title"
                    @keyup.enter="$store.commit('confirmTodo')"
-                   @keyup.esc="$store.commit('cancelTodo',item)"
+                   @keyup.esc="$store.commit('cancelTodo',todo)"
                    @blur="$store.commit('confirmTodo')"
-                   v-todo-focus="$store.state.editTodo===item"
+                   v-todo-focus="$store.state.editTodo===todo"
             >
         </li>
     </ul>
@@ -26,6 +27,11 @@
 <script>
     export default {
         name: "Todos",
+        computed: {
+          vuexTodos(){
+              return this.$store.getters.showTodos();
+          }
+        },
         directives: {
             'todo-focus': function (el, binding) {
                 if (binding.value) {

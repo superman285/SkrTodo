@@ -16,7 +16,7 @@
             >Completed</router-link>
             </li>
         </ul>
-        <button class="clear-completed" @click="$parent.deleteAll">Clear completed</button>
+        <button class="clear-completed" @click="$store.commit('removeCompleted')">Clear completed</button>
     </footer>
 </template>
 

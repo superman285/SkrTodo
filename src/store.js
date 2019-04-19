@@ -12,30 +12,23 @@ export default new Vuex.Store({
         beforeEditCache: "",
         todos: [
             {
-                title: "宇宙第一标",
+                title: "我是NO.1",
                 completed: false,
-                editing: true,
             },
             {
                 title: "千年老二",
                 completed: true,
-                editing: false,
             },
             {
-                title: "千年老三",
+                title: "唐家三少",
                 completed: false,
-                editing: false,
             }
         ],
         filter: "all"
     },
     getters: {
-        hasCompleted: state => {
-            return state.todos.some(todo => todo.completed);
-        },
-        allCompleted: state => {
-            return state.todos.every(todo => todo.completed);
-        },
+        /*hasCompleted: state => state.todos.some(todo => todo.completed),*/
+        allCompleted: state => state.todos.every(todo => todo.completed),
         showTodos: state => {
             if (state.filter === "active") {
                 return state.todos.filter(item => !item.completed)
