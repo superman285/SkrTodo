@@ -2,8 +2,8 @@
     <section class="main">
         <input id="toggle-all" class="toggle-all"
                type="checkbox"
-               :checked="$parent.allDone"
-               @change="$parent.allDone=!allDone"
+               :checked="$store.getters.allCompleted"
+               @change="$store.commit('setAllCompleted',!$store.getters.allCompleted)"
         >
         <label for="toggle-all">Mark all as complete</label>
         <!--<ul class="todo-list">

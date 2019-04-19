@@ -1,19 +1,11 @@
 <template>
-    <div id="app">
-        <the-header @newTodoEvent="newTodo"></the-header>
+    <div id="app" class="todoapp">
+        <the-header></the-header>
 
-        <router-view></router-view>
+        <todo-list></todo-list>
 
         <the-footer></the-footer>
 
-
-
-
-        <!--<footer class="info">
-            <p>Double-click to edit a todo</p>
-            <p>Written by <a href="http://evanyou.me">Evan You</a></p>
-            <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
-        </footer>-->
     </div>
 </template>
 
@@ -76,12 +68,13 @@
                     return this.todos;
                 }
             },
-            todoCount: function(){
+            todosCount: function(){
                 return this.showTodos.length;
             }
         },
         watch: {
           '$route': function(to,from){
+              this.$store.commit('changeFilter',to.path.slice(1));
               this.filter = to.path.slice(1);
           }  
         },
@@ -99,7 +92,6 @@
                 this.beforeEditCache = item.title;
             },
             confirm: function () {
-                console.log('test confirm');
                 this.editTodo = null;
             },
             cancel: function (item) {

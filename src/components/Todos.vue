@@ -1,24 +1,23 @@
 <template>
     <ul class="todo-list">
-        <h1 @click="show">hahaha</h1>
-        <li v-for="(item,idx) in $parent.showTodos"
-            :class="{todo:true,editing:item===$parent.editTodo,completed:item.completed}">
+        <li v-for="(item,idx) in $store.getters.showTodos"
+            :class="{todo:true,editing:item===$store.state.editTodo,completed:item.completed}">
             <div class="view">
                 <input class="toggle"
                        type="checkbox"
                        v-model="item.completed"
                 >
-                <label @dblclick="$parent.edit(item)"
-                       @click="$parent.finish(item)"
+                <label @dblclick="$store.commit('editTodo',item)"
+                       @click="$store.commit('finishTodo',item)"
                 >{{item.title}}</label>
-                <button class="destroy" @click="$parent.deleteTodo(idx)"></button>
+                <button class="destroy" @click="$store.commit('deleteTodo',item)"></button>
             </div>
             <input class="edit" type="text"
                    v-model="item.title"
-                   @keyup.enter="$parent.confirm"
-                   @keyup.esc="$parent.cancel(item)"
-                   @blur="$parent.confirm"
-                   v-todo-focus="$parent.editTodo===item"
+                   @keyup.enter="$store.commit('confirmTodo')"
+                   @keyup.esc="$store.commit('cancelTodo',item)"
+                   @blur="$store.commit('confirmTodo')"
+                   v-todo-focus="$store.state.editTodo===item"
             >
         </li>
     </ul>
@@ -27,11 +26,6 @@
 <script>
     export default {
         name: "Todos",
-        methods:{
-            show(){
-                console.log(this.$parent.todos);
-            }
-        },
         directives: {
             'todo-focus': function (el, binding) {
                 if (binding.value) {
