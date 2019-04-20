@@ -23,7 +23,7 @@
         methods: {
             addTodo: function(){
                 this.$store.commit('addTodo',this.newTodoTitle);
-                this.$store.commit('newTodoTitle','');
+                this.$store.commit('newTodoTitle', '');
             }
         }
     }

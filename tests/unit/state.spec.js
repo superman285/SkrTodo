@@ -24,8 +24,8 @@ describe("State Test", () => {
         expect(store.getters.allCompleted).to.equal(false);
     });
 
-    it('initial todosCount should be 3 ', ()=> {
-        expect(store.getters.todosCount).to.equal(3);
+    it('initial todosCount should be equal to todoslength ', ()=> {
+        expect(store.getters.todosCount).to.equal(store.state.todos.length);
     });
 
 })
