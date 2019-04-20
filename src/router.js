@@ -10,12 +10,12 @@ export default new Router({
     base: process.env.BASE_URL,
     routes: [
         {
-            path: '/',
+            path: window.location.href.slice(22)+'/',
             name: 'home',
             component: Todos
         },
         {
-            path: '/:filter',
+            path: window.location.href.slice(22)+'/:filter',
             name: 'Filter',
             component: Todos
         }
