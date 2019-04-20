@@ -19,8 +19,8 @@
             'todo-list': TodoList
         },
         created: function(){
-            //this.$router.push("/all");
-            this.filter = this.$route.path.slice(1);
+            this.$router.push("/all");
+            //this.filter = this.$route.path.slice(1);
         },
         watch: {
           '$route': function(to,from){
